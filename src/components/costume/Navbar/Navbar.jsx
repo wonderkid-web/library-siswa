@@ -8,10 +8,18 @@ import { FaFacebook } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { IoHomeOutline } from "react-icons/io5";
 import { SiReaddotcv } from "react-icons/si";
+import { PopUp } from "../PopUp";
+import { getSession } from "next-auth/react";
+import Loader from "./Loader";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 
-export default function navbar() {
+export default async function Navbar() {
+  const session = await getServerSession(options)
+  
   return (
     <nav className=" fixed border p-4 w-full flex z-10 justify-between items-center top-0 bg-white shadow">
+      
       <div className=" flex gap-2">
         <h1 className=" text-2xl font-medium">Library Panda</h1>
         <Image src={logo} width={40} height={40} />
@@ -40,9 +48,7 @@ export default function navbar() {
           <SiReaddotcv />
           Read
         </Link>
-        <Link href={"read"}>
-          <FaFacebook className=" text-blue-600 text-4xl" />
-        </Link>
+        <PopUp image={session?.user?.user?.photoURL} />
       </div>
     </nav>
   );

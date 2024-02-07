@@ -1,42 +1,41 @@
-"use client";
-
-import React, { useEffect } from "react";
-import { useState } from "react";
-
-import NavbarBeranda from "@/components/costume/Navbar/navbarDashboard";
+'use client'
+import NavbarBeranda from "@/components/costume/Navbar/Navbar";
 import Image from "next/image";
-import bulat from "../../../../../public/Bulat.svg";
-import book from "../../../../../public/book.svg";
-import circle from "../../../../../public/SemiCircle.svg";
-import { Button } from "@/components/ui/button";
+import bulat from "/public/Bulat.svg";
+import book from "/public/book.svg";
+import circle from "/public/SemiCircle.svg";
+
 import axios from "axios";
 import Link from "next/link";
 
 // icons
 import { IoSearch } from "react-icons/io5";
+import uuid from "react-uuid";
+import { useQuery } from "@tanstack/react-query";
+import Loader from "@/components/costume/Navbar/Loader";
+import { useSession } from "next-auth/react";
 
-export default function page() {
-  const [berita, setBerita] = useState([]);
+const getBerita = async () =>{
+  return (await axios("https://newsdata.io/api/1/news?apikey=%20pub_375958463fa34ae9ac57837482221ef1d0b5c%20&q=news")).data.results
+}
 
-  const getBerita = async () => {
-    try {
-      const response = await axios.get(
-        "https://newsdata.io/api/1/news?apikey=%20pub_375958463fa34ae9ac57837482221ef1d0b5c%20&q=news"
-      );
-      console.log(response.data.results);
-      setBerita(response.data.results);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+export default  function Page() {
 
-  useEffect(() => {
-    getBerita();
-  }, []);
+  const session = useSession()
+
+  const {data:berita, isLoading} = useQuery({
+    queryFn: getBerita,
+    queryKey: ['berita']
+  })
+
+  if(isLoading) return <Loader />
+  
 
   return (
     <>
-      <NavbarBeranda />
+    <pre>
+      {JSON.stringify(session, null, 2)}
+    </pre>
       <main className=" p-5">
         {/* <pre className=" mt-28"> {JSON.stringify(berita, null, 2)}</pre> */}
         <div className=" mt-20 grid grid-cols-2">
@@ -61,10 +60,10 @@ export default function page() {
                 </p>
               </div>
               <div className=" mt-5">
-                <Button className=" bg-blue-500 shadow-md rounded-full text-xl px-5 py-7 flex gap-2 items-center">
+                <Link href={'read'} className="text-white bg-blue-500 shadow-md rounded-full text-xl px-5 py-7 flex gap-2 items-center">
                   <IoSearch />
                   Search Book
-                </Button>
+                </Link >
               </div>
             </div>
           </div>
@@ -75,22 +74,20 @@ export default function page() {
 
         <div className=" mt-6 grid grid-cols-4 gap-2 p-5 border-t">
           {berita.map((data) => (
-            <div className=" border col-span-1 rounded-md">
+            <div key={uuid()} className=" border col-span-1 rounded-md">
               <div>
-                <Image
-                  src={data.imae_url}
-                  width={400}
-                  height={400}
-                  className=" rounded-t-md"
-                />
+                <img src={data.image_url} className=" rounded-t-md" />
               </div>
               <div className=" p-4 h-36">
                 <h1 className=" text-justify">{data.title}</h1>
               </div>
               <div className=" flex items-center">
-                <Button className=" w-[80%] mx-auto my-4 bg-blue-500 text-white">
-                  <Link href={`${data.link}`}>Lihat Berita</Link>
-                </Button>
+                <Link
+                  className=" w-[80%] text-center rounded-md px-4 mx-auto mb-2 h-8 leading-7 hover:bg-blue-600 bg-blue-500 text-white"
+                  href={`${data.link}`}
+                >
+                  Lihat Berita
+                </Link>
               </div>
             </div>
           ))}
