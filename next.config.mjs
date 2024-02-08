@@ -30,6 +30,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "awsimages.detik.net.id",
       },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+      },
     ],
   },
 };

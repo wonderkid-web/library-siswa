@@ -12,6 +12,7 @@ import { FiDownloadCloud } from "react-icons/fi";
 import { LuBookOpen } from "react-icons/lu";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
+import Navbar from "@/components/costume/Navbar/Navbar";
 
 const getSpesificBook = async (id) => {
   try {
@@ -42,8 +43,8 @@ export default function Page({ params: { id } }) {
   if (isLoading) return <h1>Loading buku...</h1>;
 
   return (
-    <>
-      <NavbarRead />
+    <div className="min-h-screen">
+      <Navbar />
       <main className="p-16 mt-20">
         {/* <pre>{JSON.stringify(book, null, 2)}</pre> */}
         <div className=" grid grid-cols-[60%_1fr] gap-8">
@@ -143,6 +144,6 @@ export default function Page({ params: { id } }) {
           </div>
         </div>
       </main>
-    </>
+    </div>
   );
 }

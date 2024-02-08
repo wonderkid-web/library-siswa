@@ -1,11 +1,18 @@
 "use client";
+import Spinner from "@/components/Spinner";
 import Loader from "@/components/costume/Navbar/Loader";
 import { TablePinjaman } from "@/components/costume/Profile/TablePinjaman";
+import app, { storage } from "@/lib/firebase";
+import { useProfilePicture } from "@/store";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { getAuth, updateProfile } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
+import uuid from "react-uuid";
+import { Toaster, toast } from "sonner";
 
 const getTerpinjam = async () => {
   return (
@@ -14,27 +21,47 @@ const getTerpinjam = async () => {
 };
 
 export default function Page() {
+  const [loading, setLoading] = useState(false)
+  const [photoFile, setPhotoFile] = useState("");
   const session = useSession();
+  const auth = getAuth(app);
+
+  const { updateProfile, profile } = useProfilePicture();
 
   const { data, isLoading } = useQuery({
     queryFn: getTerpinjam,
-    queryKey: ["loan"],
+    queryKey: ["loann"],
   });
 
   const handleFile = (e) => {
-    // if (e.target.files[0]) {
-    //     const ext = e.target.files[0].name.split('.').pop()
-    //     setExstention(ext)
-    //     setPhotoFile(e.target.files[0])
-    // }
+    if (e.target.files[0]) {
+      const ext = e.target.files[0].name.split(".").pop();
+      // setExstention(ext)
+      setPhotoFile(e.target.files[0]);
+    }
   };
 
-  const handleUploadProfilePhoto = () => {
-    // uploadProfilePict(photoFile, user, setLoading, exstention)
+  const handleUploadProfilePhoto = async () => {
+    setLoading(true)
+    try {
+      const imageRef = ref(storage, `/profile/${uuid()}-${photoFile.name}`);
+      const upload = await uploadBytes(imageRef, photoFile);
+      const photoURL = await getDownloadURL(upload.ref);
+
+      await updateProfile(auth.currentUser, { photoURL });
+      await session.update(photoURL);
+      updateProfile(photoURL)
+
+      toast.success("berhasil update foto");
+    } catch (error) {
+      toast.error("gagal update foto");
+    }
+    setLoading(false)
   };
 
   return (
     <main className=" p-5 mt-20 bg-slate-50 min-w-[100vh]">
+      <Toaster />
       <div className="profile grid grid-cols-2">
         {/* {user && <img src={photoURL} alt="Movie" />} */}
         <div className="h-44 w-44 rounded-full overflow-hidden relative mx-auto">
@@ -62,9 +89,10 @@ export default function Page() {
               <button
                 // disabled={loading}
                 onClick={() => handleUploadProfilePhoto()}
-                className="btn btn-warning join-item"
+                className="btn btn-warning join-item flex items-center"
+                disabled={loading}
               >
-                upload file
+                {loading ? 'Mengupload...' : 'Upload Foto'}
               </button>
             </div>
           </div>

@@ -13,31 +13,19 @@ import { IoSearch } from "react-icons/io5";
 import uuid from "react-uuid";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "@/components/costume/Navbar/Loader";
-import { useSession } from "next-auth/react";
-import { format, setDate } from "date-fns";
-import { id } from "date-fns/locale";
-import { useForm } from "react-hook-form";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import { useState } from "react";
+
 
 const getBerita = async () => {
   return (await axios(process.env.NEXT_PUBLIC_BASE_BERITA_URL)).data.data;
 };
 
 export default function Beranda() {
-  // const session = useSession();
-  const [user, setUser] = useState("");
-
-  const { handleSubmit, register } = useForm();
-
   const { data: berita, isLoading } = useQuery({
     queryFn: getBerita,
     queryKey: ["berita"],
   });
 
   
-
   if (isLoading) return <Loader />;
 
   return (

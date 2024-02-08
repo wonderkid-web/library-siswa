@@ -205,27 +205,27 @@ export function TablePinjaman({ data }) {
       cell: ({ row }) => <div>{tanggal(row.getValue("returnAt"))}</div>,
     },
 
-    {
-      accessorKey: "returnAt",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          className="flex mx-auto "
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <span>Waktu Tersisa</span>
-          <CaretSortIcon className="ml-2 h-4 w-3" />
-        </Button>
-      ),
-      cell: ({ row }) => (
-        <div>
-          <Countdown
-            date={Number(moment(row.getValue("returnAt")).format("x"))}
-            renderer={renderer}
-          />
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "returnAt",
+    //   header: ({ column }) => (
+    //     <Button
+    //       variant="ghost"
+    //       className="flex mx-auto "
+    //       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //     >
+    //       <span>Waktu Tersisa</span>
+    //       <CaretSortIcon className="ml-2 h-4 w-3" />
+    //     </Button>
+    //   ),
+    //   cell: ({ row }) => (
+    //     <div>
+    //       <Countdown
+    //         date={Number(moment(row.getValue("returnAt")).format("x"))}
+    //         renderer={renderer}
+    //       />
+    //     </div>
+    //   ),
+    // },
 
     // status column
     {
@@ -308,9 +308,9 @@ export function TablePinjaman({ data }) {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter title..."
-          value={table.getColumn("book_name")?.getFilterValue() ?? ""}
+          value={table.getColumn("title")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("book_name")?.setFilterValue(event.target.value)
+            table.getColumn("title")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

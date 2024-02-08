@@ -54,10 +54,9 @@ const onLogin = async (payload) => {
       payload.password
     );
 
-    return data
+    return data;
   } catch (error) {
     console.error(error.message);
-
 
     return null;
   }
@@ -65,7 +64,7 @@ const onLogin = async (payload) => {
 
 const pages = {
   signIn: "/signin",
-}
+};
 
 export const options = {
   providers: [
@@ -102,12 +101,19 @@ export const options = {
       },
     }),
   ],
-  
+
   pages,
 
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       const now = new Date().getTime() / 1000;
+
+
+      if(trigger==="update"){
+        token.user.photoURL = session
+      }
+
+
       if (token)
         return {
           ...token,
@@ -143,6 +149,5 @@ export const options = {
     },
   },
 
-
-  secret: process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET,
 };

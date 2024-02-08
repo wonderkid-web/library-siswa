@@ -81,6 +81,8 @@ export default function Page() {
                 <div className="grid grid-cols-2 place-items-center">
                   <h1 className=" font-semibold text-lg">{items.title}</h1>
 
+                  <div className="flex flex-col gap-3">
+                  <span className="flex justify-center items-center p-1 rounded-md">{items?.year}</span>
                   <span
                     className={`mt-3 w-fit text-sm font-semibold p-1 rounded-md ${
                       !items.stock
@@ -90,6 +92,8 @@ export default function Page() {
                   >
                     Stock : {items.stock}
                   </span>
+
+                  </div>
                 </div>
 
                 <p className=" mt-3 h-20 text-sm line-clamp-3">
