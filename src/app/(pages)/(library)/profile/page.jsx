@@ -1,5 +1,5 @@
 "use client";
-import Spinner from "@/components/Spinner";
+
 import Loader from "@/components/costume/Navbar/Loader";
 import { TablePinjaman } from "@/components/costume/Profile/TablePinjaman";
 import app, { storage } from "@/lib/firebase";
@@ -31,6 +31,9 @@ export default function Page() {
   const { data, isLoading } = useQuery({
     queryFn: getTerpinjam,
     queryKey: ["loann"],
+    select: (data)=>{
+      return data.filter(d=>d.email == session.data.user.user.email)
+    }
   });
 
   const handleFile = (e) => {
@@ -72,11 +75,9 @@ export default function Page() {
             fill
           />
         </div>
-
         <div className="card-body flex flex-col items-end gap-8">
-          <h2 className="card-title self-end">Wahyu</h2>
+          <h2 className="card-title self-end">{session.data?.user?.user?.email}</h2>
           {/* <h2 className="card-title self-end">{user.displayName}</h2> */}
-          <p className="self-end">mwahyuap2018@gmail.com</p>
           {/* <p className="self-end">{user.email}</p> */}
 
           <div className="card-actions justify-end">

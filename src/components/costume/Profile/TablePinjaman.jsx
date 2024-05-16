@@ -229,7 +229,7 @@ export function TablePinjaman({ data }) {
 
     // status column
     {
-      accessorKey: "Catatan",
+      accessorKey: "status",
       header: ({ column }) => (
         <div
           className="mx-auto text-center cursor-default font-bold"
@@ -241,22 +241,27 @@ export function TablePinjaman({ data }) {
       cell: ({ row }) => {
         return (
           <div className="text-center grid grid-cols-2 box-border text-sm gap-2 text-teal-900 w-32">
-            {row.original.status === "dipulangkan" && (
+            {row.getValue("status").toLowerCase() === "dipinjam" && (
+              <button className="p-1 rounded-md bg-green-200 w-32">
+                Buku masih dipinjam.
+              </button>
+            )}
+            {row.getValue("status").toLowerCase() === "dipulangkan" && (
               <button className="p-1 rounded-md bg-green-200 w-32">
                 Tidak ada Sanksi
               </button>
             )}
-            {row.original.status === "Denda" && (
+            {row.getValue("status").toLowerCase() === "denda" && (
               <button className="p-1 rounded-md bg-yellow-200 w-32">
                 Kamu di Denda Rp. 5.000 karna telat memulangkan buku
               </button>
             )}
-            {row.original.status === "Rusak" && (
+            {row.getValue("status").toLowerCase() === "rusak" && (
               <button className="p-1 rounded-md bg-orange-200 w-32">
                 Kamu di Denda Rp. 25.000 karna merusak buku
               </button>
             )}
-            {row.original.status === "Hilang" && (
+            {row.getValue("status").toLowerCase() === "hilang" && (
               <button className="p-1 rounded-md bg-red-200 w-32">
                 Kamu di Denda Rp. 150.000 karna menghilangkan buku
               </button>

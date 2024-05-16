@@ -10,6 +10,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createLoan } from "@/action";
 import { Toaster, toast } from "sonner";
 import Loader from "@/components/costume/Navbar/Loader";
+import { useSession } from "next-auth/react";
 
 const getData = async () => {
   try {
@@ -24,6 +25,7 @@ const getData = async () => {
 
 export default function Page() {
   const queryClient = useQueryClient();
+  const session = useSession()
 
   const { data, isLoading } = useQuery({
     queryFn: getData,
@@ -46,7 +48,7 @@ export default function Page() {
   const handleLoan = async (data) => {
     try {
       toast.info("Proses Peminjaman...");
-      stocking.mutate({...data, bookId: data.id});
+      stocking.mutate({...data, bookId: data.id, email: session?.data?.user?.user.email});
     } catch (error) {
       toast.error(`Gagal Meminjam Buku: ${data.title}`);
       console.error(error);

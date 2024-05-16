@@ -117,7 +117,7 @@ export default function Page({ params: { id } }) {
               {isModalOpen && (
                 <dialog
                   id="my_modal_3"
-                  className="modal absolute top-[70vh] w-2/3 mx-auto flex flex-col justify-center items-center h-3/4 rounded-md"
+                  className="modal absolute top-[20vh] w-2/3 mx-auto flex flex-col justify-center items-center h-3/4 rounded-md"
                   open
                 >
                   <form

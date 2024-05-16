@@ -27,7 +27,7 @@ export default function Page() {
         position: "top-center",
       });
     } else {
-      router.push("/beranda");
+      router.push("/");
     }
   };
 
