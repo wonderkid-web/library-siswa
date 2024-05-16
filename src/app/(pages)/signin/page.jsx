@@ -17,6 +17,8 @@ export default function Page() {
   const { handleSubmit, register } = useForm();
 
   const onLogin = async (form) => {
+
+    toast.loading("Proses Authentikasi..")
     const signin = await signIn("credentials", {
       ...form,
       redirect: false,
